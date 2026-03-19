@@ -1,3 +1,4 @@
+import 'package:expense_tracker_app/models/stats/calender_stats_model.dart';
 import 'package:expense_tracker_app/models/stats/monthly_stats_model.dart';
 import 'package:expense_tracker_app/services/api_service.dart';
 
@@ -21,6 +22,16 @@ class StatsService {
     );
 
     return (data as List).map((e) => MonthlyStatsModel.fromJson(e)).toList();
+  }
+
+  static Future<CalendarStatsModel> getCalendar(int month, int year) async {
+    final data = await ApiService.request(
+      endpoint: '/stats/calendar?month=$month&year=$year',
+      method: 'GET',
+    );
+
+    // aggregate trả về array
+    return CalendarStatsModel.fromJson(data[0]);
   }
 
   static Future<List<CategoryStatsModel>> getCategory() async {

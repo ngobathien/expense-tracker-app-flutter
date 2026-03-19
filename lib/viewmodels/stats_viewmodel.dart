@@ -1,7 +1,8 @@
-import 'package:expense_tracker_app/models/stats/monthly_stats_model.dart';
+import 'package:expense_tracker_app/models/stats/calender_stats_model.dart';
 import 'package:flutter/material.dart';
 
 import '../models/stats/category_stats_model.dart';
+import '../models/stats/monthly_stats_model.dart';
 import '../models/stats/stats_model.dart';
 import '../models/transaction_model.dart'; // import TransactionModel
 import '../services/stats_service.dart';
@@ -30,6 +31,23 @@ class StatsViewModel extends ChangeNotifier {
   List get expenseTransactions => currentMonth?.expenseTransactions ?? [];
 
   /// ================= FUNCTIONS =================
+  // ================= CALENDAR =================
+  CalendarStatsModel? calendarData;
+
+  List<CalendarDay> get calendarDays => calendarData?.calendar ?? [];
+  List<DailyTransaction> get dailyList => calendarData?.daily ?? [];
+  Summary? get monthSummary => calendarData?.summary;
+
+  /// 📅 calendar theo tháng
+  Future<void> fetchCalendar(DateTime date) async {
+    _setLoading(true);
+    try {
+      calendarData = await StatsService.getCalendar(date.month, date.year);
+    } catch (e) {
+      error = e.toString();
+    }
+    _setLoading(false);
+  }
 
   /// 🔥 summary (all time)
   Future<void> fetchSummary() async {
