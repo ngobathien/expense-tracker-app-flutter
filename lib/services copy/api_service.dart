@@ -5,29 +5,17 @@ import 'package:http/http.dart' as http;
 class ApiService {
   static const String baseUrl = "http://10.0.2.2:3000/api/v1";
 
-  /// 🔥 GLOBAL TOKEN
-  static String? _token;
-
-  static void setToken(String token) {
-    _token = token;
-  }
-
-  static void clearToken() {
-    _token = null;
-  }
-
   static Future<dynamic> request({
     required String endpoint,
     required String method,
+    String? token,
     Map<String, dynamic>? body,
   }) async {
     final uri = Uri.parse('$baseUrl$endpoint');
 
     final headers = {
       'Content-Type': 'application/json',
-
-      /// 🔥 AUTO GẮN TOKEN
-      if (_token != null) 'Authorization': 'Bearer $_token',
+      if (token != null) 'Authorization': 'Bearer $token',
     };
 
     http.Response response;
@@ -36,6 +24,7 @@ class ApiService {
       case 'GET':
         response = await http.get(uri, headers: headers);
         break;
+
       case 'POST':
         response = await http.post(
           uri,
@@ -43,6 +32,7 @@ class ApiService {
           body: jsonEncode(body),
         );
         break;
+
       case 'PUT':
         response = await http.put(
           uri,
@@ -50,6 +40,7 @@ class ApiService {
           body: jsonEncode(body),
         );
         break;
+
       case 'PATCH':
         response = await http.patch(
           uri,
@@ -57,9 +48,11 @@ class ApiService {
           body: jsonEncode(body),
         );
         break;
+
       case 'DELETE':
         response = await http.delete(uri, headers: headers);
         break;
+
       default:
         throw Exception('Method không hợp lệ');
     }

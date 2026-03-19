@@ -1,5 +1,5 @@
+import 'package:expense_tracker_app/views/transactions/add_transaction_screen.dart';
 import 'package:flutter/material.dart';
-import 'add_expense_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -35,7 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () async {
           final result = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AddExpenseScreen()),
+            MaterialPageRoute(
+              builder: (context) => const AddEditTransactionScreen(),
+            ),
           );
 
           if (result != null) {
