@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'router/app_router.dart';
 import 'router/app_routes.dart';
+import 'viewmodels/ai_chatbot_view_model.dart';
 import 'viewmodels/auth_viewmodel.dart';
 import 'viewmodels/category_viewmodel.dart';
 import 'viewmodels/transaction_viewmodel.dart';
@@ -31,6 +32,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CategoryViewModel()),
         ChangeNotifierProvider(create: (_) => StatsViewModel()),
         ChangeNotifierProvider(create: (_) => UserViewModel()),
+        ChangeNotifierProvider(
+          create: (context) =>
+              AiChatbotViewModel(context.read<AuthViewModel>()),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -27,6 +27,10 @@ class StatsViewModel extends ChangeNotifier {
   double get monthIncome => currentMonth?.totalIncome ?? 0;
   double get monthExpense => currentMonth?.totalExpense ?? 0;
 
+  double get calendarIncome => calendarData?.totalIncome ?? 0;
+  double get calendarExpense => calendarData?.totalExpense ?? 0;
+  double get calendarBalance => calendarData?.balance ?? 0;
+
   List get incomeTransactions => currentMonth?.incomeTransactions ?? [];
   List get expenseTransactions => currentMonth?.expenseTransactions ?? [];
 
@@ -35,8 +39,8 @@ class StatsViewModel extends ChangeNotifier {
   CalendarStatsModel? calendarData;
 
   List<CalendarDay> get calendarDays => calendarData?.calendar ?? [];
-  List<DailyTransaction> get dailyList => calendarData?.daily ?? [];
-  Summary? get monthSummary => calendarData?.summary;
+  List<DailyDetail> get dailyList => calendarData?.daily ?? [];
+  // Summary? get monthSummary => calendarData?.summary;
 
   /// 📅 calendar theo tháng
   Future<void> fetchCalendar(DateTime date) async {

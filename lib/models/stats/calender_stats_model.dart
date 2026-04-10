@@ -1,49 +1,3 @@
-class CalendarStatsModel {
-  final Summary summary;
-  final List<CalendarDay> calendar;
-  final List<DailyTransaction> daily;
-
-  CalendarStatsModel({
-    required this.summary,
-    required this.calendar,
-    required this.daily,
-  });
-
-  factory CalendarStatsModel.fromJson(Map<String, dynamic> json) {
-    return CalendarStatsModel(
-      summary: Summary.fromJson(json['summary']),
-      calendar: (json['calendar'] as List)
-          .map((e) => CalendarDay.fromJson(e))
-          .toList(),
-      daily: (json['daily'] as List)
-          .map((e) => DailyTransaction.fromJson(e))
-          .toList(),
-    );
-  }
-}
-
-// ================= SUMMARY =================
-class Summary {
-  final double totalIncome;
-  final double totalExpense;
-  final double balance;
-
-  Summary({
-    required this.totalIncome,
-    required this.totalExpense,
-    required this.balance,
-  });
-
-  factory Summary.fromJson(Map<String, dynamic> json) {
-    return Summary(
-      totalIncome: (json['totalIncome'] ?? 0).toDouble(),
-      totalExpense: (json['totalExpense'] ?? 0).toDouble(),
-      balance: (json['balance'] ?? 0).toDouble(),
-    );
-  }
-}
-
-// ================= CALENDAR GRID =================
 class CalendarDay {
   final String date;
   final double income;
@@ -64,51 +18,55 @@ class CalendarDay {
   }
 }
 
-// ================= DAILY LIST =================
-class DailyTransaction {
+class DailyDetail {
   final String date;
   final double totalIncome;
   final double totalExpense;
-  final double total;
-  final List<TransactionItem> transactions;
+  final List transactions;
 
-  DailyTransaction({
+  DailyDetail({
     required this.date,
     required this.totalIncome,
     required this.totalExpense,
-    required this.total,
     required this.transactions,
   });
 
-  factory DailyTransaction.fromJson(Map<String, dynamic> json) {
-    return DailyTransaction(
+  factory DailyDetail.fromJson(Map<String, dynamic> json) {
+    return DailyDetail(
       date: json['date'],
       totalIncome: (json['totalIncome'] ?? 0).toDouble(),
       totalExpense: (json['totalExpense'] ?? 0).toDouble(),
-      total: (json['total'] ?? 0).toDouble(),
-      transactions: (json['transactions'] as List)
-          .map((e) => TransactionItem.fromJson(e))
-          .toList(),
+      transactions: json['transactions'] ?? [],
     );
   }
 }
 
-class TransactionItem {
-  final String name;
-  final double amount;
-  final String categoryName;
+class CalendarStatsModel {
+  final double totalIncome;
+  final double totalExpense;
+  final double balance;
+  final List<CalendarDay> calendar;
+  final List<DailyDetail> daily;
 
-  TransactionItem({
-    required this.name,
-    required this.amount,
-    required this.categoryName,
+  CalendarStatsModel({
+    required this.totalIncome,
+    required this.totalExpense,
+    required this.balance,
+    required this.calendar,
+    required this.daily,
   });
 
-  factory TransactionItem.fromJson(Map<String, dynamic> json) {
-    return TransactionItem(
-      name: json['name'],
-      amount: (json['amount'] ?? 0).toDouble(),
-      categoryName: json['categoryName'] ?? '',
+  factory CalendarStatsModel.fromJson(Map<String, dynamic> json) {
+    return CalendarStatsModel(
+      totalIncome: (json['totalIncome'] ?? 0).toDouble(),
+      totalExpense: (json['totalExpense'] ?? 0).toDouble(),
+      balance: (json['balance'] ?? 0).toDouble(),
+      calendar: (json['calendar'] as List)
+          .map((e) => CalendarDay.fromJson(e))
+          .toList(),
+      daily: (json['daily'] as List)
+          .map((e) => DailyDetail.fromJson(e))
+          .toList(),
     );
   }
 }

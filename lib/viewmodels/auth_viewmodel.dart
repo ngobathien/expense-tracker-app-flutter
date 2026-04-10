@@ -1,3 +1,4 @@
+import 'package:expense_tracker_app/models/user_model.dart';
 import 'package:expense_tracker_app/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,6 +12,9 @@ class AuthViewModel extends ChangeNotifier {
   String? accessToken;
   String? refreshToken;
 
+  UserModel? _currentUser;
+  UserModel? get currentUser => _currentUser;
+
   bool get isLoggedIn => accessToken != null;
 
   // ================= AUTO LOGIN =================
@@ -22,6 +26,19 @@ class AuthViewModel extends ChangeNotifier {
 
     if (accessToken != null) {
       ApiService.setToken(accessToken!);
+
+      try {
+        // 🔥 GỌI API PROFILE
+        final profile = await AuthService.getProfile();
+
+        print("PROFILE RESPONSE: $profile"); // 👈 LOG 1
+
+        _currentUser = UserModel.fromJson(profile);
+
+        print("USER ID SAU AUTO LOGIN: ${_currentUser?.id}"); // 👈 LOG 2
+      } catch (e) {
+        print("LỖI LOAD PROFILE: $e"); // 👈 LOG 3
+      }
     }
 
     notifyListeners();
@@ -36,6 +53,7 @@ class AuthViewModel extends ChangeNotifier {
 
       accessToken = data['accessToken'];
       refreshToken = data['refreshToken'];
+      _currentUser = UserModel.fromJson(data['user']);
 
       // ✅ SAVE TOKEN
       final prefs = await SharedPreferences.getInstance();
